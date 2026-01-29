@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #333;
+            padding: 6px;
+            text-align: left;
+        }
+        .right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h2>Wheel Alignment Shop</h2>
+    <p>Invoice #{{ bill.bill_number }}</p>
+</div>
+
+<p>
+    <strong>Customer:</strong> {{ bill.customer.name }} <br>
+    <strong>Phone:</strong> {{ bill.customer.phone_number }} <br>
+    <strong>Vehicle:</strong> {{ bill.customer.vehicle_number or "-" }}
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Particular</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in bill.items %}
+        <tr>
+            <td>{{ item.particular.name }}</td>
+            <td class="right">{{ item.quantity }}</td>
+            <td class="right">{{ item.unit_price }}</td>
+            <td class="right">{{ item.line_total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p class="right">
+    <strong>Total: ₹{{ bill.total }}</strong>
+</p>
+
+</body>
+</html>
