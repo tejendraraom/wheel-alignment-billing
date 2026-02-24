@@ -1,5 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from alembic import command
+from alembic.config import Config
+import os
+
 from app.core.database import engine, Base
 from app.models.customer import Customer  # noqa
 from app.modules.customers.routes import router as customer_router
@@ -34,7 +38,8 @@ app.include_router(technician_router)
 
 @app.on_event("startup")
 def startup():
-    Base.metadata.create_all(bind=engine)
+    alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
+    command.upgrade(alembic_cfg, "head")
 
 @app.get("/")
 def health():

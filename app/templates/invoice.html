@@ -35,7 +35,10 @@
 <p>
     <strong>Customer:</strong> {{ bill.customer.name }} <br>
     <strong>Phone:</strong> {{ bill.customer.phone_number }} <br>
-    <strong>Vehicle:</strong> {{ bill.customer.vehicle_number or "-" }}
+    <strong>Vehicle:</strong> {{ bill.customer.vehicle_number or "-" }} <br>
+    {% if bill.technician %}
+    <strong>Technician:</strong> {{ bill.technician.name }}
+    {% endif %}
 </p>
 
 <table>
