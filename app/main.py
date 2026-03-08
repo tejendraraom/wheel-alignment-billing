@@ -36,10 +36,10 @@ app.include_router(particular_router)
 app.include_router(billing_router)
 app.include_router(technician_router)
 
-@app.on_event("startup")
-def startup():
-    alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
-    command.upgrade(alembic_cfg, "head")
+# @app.on_event("startup")
+# def startup():
+#     alembic_cfg = Config(os.path.join(os.path.dirname(__file__), "..", "alembic.ini"))
+#     command.upgrade(alembic_cfg, "head")
 
 @app.get("/")
 def health():
