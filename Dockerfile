@@ -26,4 +26,4 @@ COPY ./app /app/app
 COPY ./alembic.ini /app/alembic.ini
 COPY ./alembic /app/alembic
 
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port $PORT"]
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
