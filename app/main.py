@@ -7,6 +7,7 @@ from alembic.config import Config
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import create_engine, text
+from sqlalchemy.pool import NullPool
 
 from app.modules.customers.routes import router as customer_router
 from app.modules.particulars.routes import router as particular_router
@@ -25,19 +26,18 @@ _MIGRATION_LOCK_ID = 741852963
 
 def _run_migrations() -> None:
     alembic_cfg = Config(os.path.abspath(_ALEMBIC_INI))
-    engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True)
-    try:
-        with engine.connect() as conn:
-            logger.info("Acquiring migration advisory lock...")
-            conn.execute(text(f"SELECT pg_advisory_lock({_MIGRATION_LOCK_ID})"))
-            try:
-                logger.info("Running Alembic migrations...")
-                command.upgrade(alembic_cfg, "head")
-                logger.info("Migrations complete.")
-            finally:
-                conn.execute(text(f"SELECT pg_advisory_unlock({_MIGRATION_LOCK_ID})"))
-    finally:
-        engine.dispose()
+    # NullPool ensures the connection is physically closed (not returned to a pool)
+    # as soon as the context manager exits, preventing pool-related hangs.
+    engine = create_engine(os.environ["DATABASE_URL"], poolclass=NullPool)
+    with engine.connect() as conn:
+        logger.info("Acquiring migration advisory lock...")
+        conn.execute(text(f"SELECT pg_advisory_lock({_MIGRATION_LOCK_ID})"))
+        try:
+            logger.info("Running Alembic migrations...")
+            command.upgrade(alembic_cfg, "head")
+            logger.info("Migrations complete.")
+        finally:
+            conn.execute(text(f"SELECT pg_advisory_unlock({_MIGRATION_LOCK_ID})"))
 
 
 @asynccontextmanager
