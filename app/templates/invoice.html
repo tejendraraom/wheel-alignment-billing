@@ -23,6 +23,17 @@
         .right {
             text-align: right;
         }
+        .km-reminder {
+            margin-top: 16px;
+            padding: 10px 12px;
+            border: 1px dashed #555;
+            border-radius: 4px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        .km-reminder p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -65,6 +76,14 @@
 <p class="right">
     <strong>Total: ₹{{ bill.total }}</strong>
 </p>
+
+{% if bill.current_km %}
+<div class="km-reminder">
+    <p><strong>Current KM Reading:</strong> {{ bill.current_km }} km</p>
+    <p><strong>Free Checkup Due at:</strong> {{ bill.current_km + 1000 }} km</p>
+    <p><strong>Next Alignment Due at:</strong> {{ bill.current_km + 5000 }} km</p>
+</div>
+{% endif %}
 
 </body>
 </html>

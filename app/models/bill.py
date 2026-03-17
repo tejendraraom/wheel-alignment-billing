@@ -11,6 +11,8 @@ class Bill(Base):
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     technician_id = Column(Integer, ForeignKey("technicians.id"), nullable=True)
 
+    current_km = Column(Integer, nullable=True)
+
     subtotal = Column(Float, default=0)
     total = Column(Float, default=0)
 

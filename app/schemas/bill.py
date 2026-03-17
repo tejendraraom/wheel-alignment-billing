@@ -19,6 +19,7 @@ class BillItemCreate(BaseModel):
 class BillCreate(BaseModel):
     customer_id: int
     technician_id: int | None = None
+    current_km: int | None = None
     items: List[BillItemCreate]
 
     class Config:
@@ -60,6 +61,7 @@ class BillResponse(BaseModel):
     bill_number: int
     customer_id: int
     technician_id: int | None = None
+    current_km: int | None = None
     customer: CustomerMini
     technician: TechnicianMini | None = None
     subtotal: float

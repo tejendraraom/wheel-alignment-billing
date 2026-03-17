@@ -82,6 +82,7 @@ def create_bill(data: BillCreate, db: Session = Depends(get_db)):
         bill_number=bill_number,
         customer_id=data.customer_id,
         technician_id=data.technician_id,
+        current_km=data.current_km,
     )
 
     db.add(bill)
